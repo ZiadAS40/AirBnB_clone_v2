@@ -41,14 +41,16 @@ class DBStorage:
         from models.review import Review
         from models.state import State
         from models.user import User
-        if cls:
-            objects = self.__session.query(cls).all()
-        else:
-            classes = [User, State, City, Amenity, Place, Review]
-            objects = []
-            for class_name in classes:
-                objects.extend(self.__session.query(class_name).all())
-        return {obj.__class__.__name__ + '.' + obj.id: obj for obj in objects}
+        classes = {"Amenity": Amenity, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
+        new_dict = {}
+        for clss in classes:
+            if cls is None or cls is classes[clss] or cls is clss:
+                objs = self.__session.query(classes[clss]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+        return (new_dict)
     
     def new(self, obj):
         """

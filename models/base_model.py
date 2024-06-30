@@ -22,9 +22,9 @@ class BaseModel:
             self.updated_at = datetime.now()
         else:
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%d %H:%M:%S.%f')
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%d %H:%M:%S.%f')
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
             if '__class__' in kwargs:
                 del kwargs['__class__']
             for key, value in kwargs.items():

@@ -122,20 +122,20 @@ class HBNBCommand(cmd.Cmd):
         elif obj not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[obj]()
+        new_dict = {}
         for attr in Marr:
             Tarr = attr.split('=')
             if isinstance(Tarr[1], str):
                 Tarr[1].replace('\"', '\\"')
                 Tarr[1].replace('_', ' ')
-                setattr(new_instance, Tarr[0], Tarr[1])
+                new_dict.update({Tarr[0]: Tarr[1]})
             if isinstance(Tarr[1], float):
-                setattr(new_instance, Tarr[0], Tarr[1])
+                new_dict.update({Tarr[0]: Tarr[1]})
             if isinstance(Tarr[1], (int, complex)):
-                setattr(new_instance, Tarr[0], Tarr[1])
-        storage.save()
+                new_dict.update({Tarr[0]: Tarr[1]})
+        new_instance = HBNBCommand.classes[obj](**new_dict)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """

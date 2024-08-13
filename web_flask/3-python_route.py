@@ -27,7 +27,7 @@ def display_txt(text):
 @app.route('/python/<text>', strict_slashes=False)
 def display_txt_with_def(text='is cool'):
     """displaying the text with default"""
-    return "Python  {}".format(text.replace('_', ' '))
+    return "Python {}".format(text.replace('_', ' '))
 
 
 if __name__ == "__main__":

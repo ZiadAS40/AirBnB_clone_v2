@@ -63,3 +63,7 @@ class FileStorage:
         if obj == None:
             return
         del FileStorage.__objects[obj.to_dict()['__class__'] + '.' + obj.id]
+    
+    def close(self):
+        """call reload to get the methods ready"""
+        self.reload()

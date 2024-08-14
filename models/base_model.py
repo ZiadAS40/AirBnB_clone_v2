@@ -10,11 +10,14 @@ if models.storage_ident == "db":
     Base = declarative_base()
 else:
     Base = object
+
+
 class BaseModel:
     """A base class for all hbnb models"""
     id = Column(String(60), unique=True, primary_key=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
+
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
         if kwargs:
@@ -58,7 +61,7 @@ class BaseModel:
         if '_sa_instance_state' in dct:
             del(dct['_sa_instance_state'])
         return dct
-    
+
     def delete(self):
         """Delete the current instance from the storage"""
         from models import storage

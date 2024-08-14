@@ -17,7 +17,7 @@ class State(BaseModel, Base if storage_ident == "db" else object):
         cities = relationship("City", backref="state")
     else:
         name = ""
-    
+
     def __init__(self, *args, **kwargs):
         """initializes state"""
         super().__init__(*args, **kwargs)
@@ -29,6 +29,6 @@ class State(BaseModel, Base if storage_ident == "db" else object):
             city_list = []
             all_cities = models.storage.all(City)
             for city in all_cities.values():
-                if city.state_id == self.id:
+                if city.state_id[1:-1] == self.id:
                     city_list.append(city)
             return city_list

@@ -31,7 +31,7 @@ class DBStorage:
 
         if getenv('HBNB_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
-    
+
     def all(self, cls=None):
         """query on the current database sesion"""
         from models.base_model import BaseModel
@@ -41,8 +41,9 @@ class DBStorage:
         from models.review import Review
         from models.state import State
         from models.user import User
-        classes = {"Amenity": Amenity, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
+        classone = {"Review": Review, "State": State, "User": User}
+        classes = {"Amenity": Amenity, "City": City, "Place": Place}
+        classes.update(classone)
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
@@ -51,26 +52,26 @@ class DBStorage:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
         return (new_dict)
-    
+
     def new(self, obj):
         """
         add an object to the current database sesion
         """
         self.__session.add(obj)
-    
+
     def save(self):
         """
         commit all the changes
         """
         self.__session.commit()
-    
+
     def delete(self, obj=None):
         """
         delete from the current database sesion
         """
-        if obj != None:
+        if obj is not None:
             self.__session.delete(obj)
-    
+
     def reload(self):
         """
         -> create all tables on the database.
@@ -83,7 +84,7 @@ class DBStorage:
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
         self.__session = Session
-    
+
     def close(self):
         """call remove for the private session"""
         self.__session.remove()

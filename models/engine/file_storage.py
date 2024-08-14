@@ -20,7 +20,8 @@ class FileStorage:
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        FileStorage.__objects.update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+        pattern = obj.to_dict()['__class__'] + '.' + obj.id
+        FileStorage.__objects.update({pattern: obj})
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -30,7 +31,6 @@ class FileStorage:
             for key, val in temp.items():
                 temp[key] = val.to_dict()
             json.dump(temp, f)
-
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -52,18 +52,18 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
         except json.JSONDecodeError:
             pass
-    
+
     def delete(self, obj=None):
         """delte obj from __objects"""
-        if obj == None:
+        if obj is None:
             return
         del FileStorage.__objects[obj.to_dict()['__class__'] + '.' + obj.id]
-    
+
     def close(self):
         """call reload to get the methods ready"""
         self.reload()

@@ -6,12 +6,6 @@ from models import storage
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def close(exception=None):
-    """tear down after session"""
-    storage.close()
-
-
 @app.route('/states_list', strict_slashes=False)
 def state_list():
     """return html consit of state list"""
@@ -22,6 +16,12 @@ def state_list():
         state_objs.update({v.name: temp[1]})
     return render_template('7-states_list.html',
                            states=state_objs)
+
+
+@app.teardown_appcontext
+def close(exception=None):
+    """tear down after session"""
+    storage.close()
 
 
 if __name__ == "__main__":

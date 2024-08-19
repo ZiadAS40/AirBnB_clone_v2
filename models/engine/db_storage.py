@@ -2,8 +2,13 @@
 """
 difining new engine
 """
-
-
+from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 class DBStorage:
     """
     defining new class for the storage
@@ -19,11 +24,11 @@ class DBStorage:
         from models.base_model import Base
 
         user = getenv('HBNB_MYSQL_USER')
-        password = getenv('HBNB_MYSQL_PWD')
+        password = getenv('HBNB_MYSQL_PWD')     
         host = getenv('HBNB_MYSQL_HOST')
         database = getenv('HBNB_MYSQL_DB')
-
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+        
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'.
                                       format(user,
                                              password,
                                              host,
@@ -34,16 +39,14 @@ class DBStorage:
 
     def all(self, cls=None):
         """query on the current database sesion"""
-        from models.base_model import BaseModel
-        from models.amenity import Amenity
-        from models.city import City
-        from models.place import Place
-        from models.review import Review
-        from models.state import State
-        from models.user import User
-        classone = {"Review": Review, "State": State, "User": User}
-        classes = {"Amenity": Amenity, "City": City, "Place": Place}
-        classes.update(classone)
+        classes = {
+            "Review": Review,
+            "State": State,
+            "User": User,
+            "Amenity": Amenity,
+            "City": City,
+            "Place": Place
+        }
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
@@ -57,7 +60,8 @@ class DBStorage:
         """
         add an object to the current database sesion
         """
-        self.__session.add(obj)
+        if obj:
+            self.__session.add(obj)
 
     def save(self):
         """
@@ -80,11 +84,11 @@ class DBStorage:
         from sqlalchemy.orm import scoped_session, sessionmaker
         from models.base_model import Base
 
-        Base.metadata.create_all(self.__engine)
+        Base.metadata.create_all(bind=self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
-        self.__session = Session
+        self.__session = Session()
 
     def close(self):
         """call remove for the private session"""
-        self.__session.remove()
+        self.__session.close()

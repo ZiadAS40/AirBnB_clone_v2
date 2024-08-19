@@ -11,8 +11,8 @@ class Place(BaseModel, Base if storage_ident == 'db' else object):
         __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities_id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users_id'), nullable=False)
-        name = Column(String(129), nullable=False)
-        description = Column(String(129), nullable=True)
+        name = Column(String(128), nullable=False)
+        description = Column(String(1024), nullable=True)
         number_rooms = Column(Integer, default=0, nullable=False)
         number_bathrooms = Column(Integer, default=0, nullable=False)
         max_guest = Column(Integer, default=0, nullable=False)
@@ -31,3 +31,7 @@ class Place(BaseModel, Base if storage_ident == 'db' else object):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+    
+    def __init__(self, *args, **kwargs):
+        """initializes Place"""
+        super().__init__(*args, **kwargs)

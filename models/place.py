@@ -2,8 +2,22 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from models import storage_ident
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
+
+
+if storage_ident == 'db':
+    place_amenity = Table('place_amenity', Base.metadata,
+            Column('place_id',
+                    String(60),
+                      ForeignKey('places.id'),
+                        primary_key=True,
+                          nullable=False),
+            Column('amenity_id',
+                    String(60),
+                      ForeignKey('amenities.id'),
+                        primary_key=True,
+                          nullable=False))
 
 
 class Place(BaseModel, Base if storage_ident == 'db' else object):
@@ -22,6 +36,9 @@ class Place(BaseModel, Base if storage_ident == 'db' else object):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         reviews = relationship('Review', backref='place')
+        amenities = relationship("Amenity", secondary="place_amenity",
+                                 backref="place_amenities",
+                                 viewonly=False)
 
     else:
         user_id = ""
@@ -39,17 +56,33 @@ class Place(BaseModel, Base if storage_ident == 'db' else object):
     def __init__(self, *args, **kwargs):
         """initializes Place"""
         super().__init__(*args, **kwargs)
-
-    @property
-    def reviews(self):
-        """
-        return a list of reviews instances
-        if the current 'place.id == obj.id'
-        """
-        from models import storage
-        re_obj = storage.all("Review")
-        final_list = []
-        for  v in re_obj.values():
-            if self.id == v.place_id[1:-1]:
-                final_list.append(v)
-        return final_list
+    
+    if storage_ident != 'db':
+        @property
+        def reviews(self):
+            """
+            return a list of reviews instances
+            if the current 'place.id == obj.id'
+            """
+            from models import storage
+            re_obj = storage.all("Review")
+            final_list = []
+            for  v in re_obj.values():
+                if self.id == v.place_id[1:-1]:
+                    final_list.append(v)
+            return final_list
+        
+        @property
+        def amenities(self):
+            """
+            return a list of amenities instances
+            if the current 'place.id == obj.id'
+            """
+            from models import storage
+            re_obj = storage.all("Amenity")
+            final_list = []
+            for v in re_obj.values():
+                if self.id == v.amenity_id[1:-1]:
+                    final_list.append(v)
+            return final_list
+           

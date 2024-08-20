@@ -179,10 +179,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            final = storage._FileStorage__objects[key]
-            if hasattr(final, '_sa_instance_state'):
-                delattr(final, '_sa_instance_state')
-            print(final)
+            print(storage._FileStorage__objects[key])
         except KeyError:
             print("** no instance found **")
 
@@ -236,27 +233,19 @@ class HBNBCommand(cmd.Cmd):
             from models import storage_ident
             if storage_ident != "db":
                 for k, v in storage._FileStorage__objects.items():
-                    if hasattr(v, '_sa_instance_state'):
-                        delattr(v, '_sa_instance_state')
                     if k.split('.')[0] == args:
                         print_list.append(str(v))
             else:
                 for k, v in storage.all(HBNBCommand.classes[args]).items():
-                    if hasattr(v, '_sa_instance_state'):
-                        delattr(v, '_sa_instance_state')
                     if k.split('.')[0] == args:
                         print_list.append(str(v))
         else:
             if storage_ident != "db":
                 for k, v in storage._FileStorage__objects.items():
-                    if hasattr(v, '_sa_instance_state'):
-                        delattr(v, '_sa_instance_state')
                     if k.split('.')[0] == args:
                         print_list.append(str(v))
             else:
                 for k, v in storage.all(HBNBCommand.classes[args]).items():
-                    if hasattr(v, '_sa_instance_state'):
-                        delattr(v, '_sa_instance_state')
                     if k.split('.')[0] == args:
                         print_list.append(str(v))
 

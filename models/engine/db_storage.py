@@ -9,6 +9,8 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+
+
 class DBStorage:
     """
     defining new class for the storage
@@ -24,10 +26,10 @@ class DBStorage:
         from models.base_model import Base
 
         user = getenv('HBNB_MYSQL_USER')
-        password = getenv('HBNB_MYSQL_PWD')     
+        password = getenv('HBNB_MYSQL_PWD')
         host = getenv('HBNB_MYSQL_HOST')
         database = getenv('HBNB_MYSQL_DB')
-        
+
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'.
                                       format(user,
                                              password,

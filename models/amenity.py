@@ -5,7 +5,7 @@ from models import storage_ident
 from sqlalchemy import Column, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
 
-metadata = Base.metadata
+
 
 class Amenity(BaseModel, Base if storage_ident == 'db' else object):
     """the Amenity Class"""

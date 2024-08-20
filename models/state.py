@@ -3,8 +3,8 @@
 import models
 from models.base_model import BaseModel, Base
 from models.city import City
-import sqlalchemy
-from sqlalchemy import Column, String
+from datetime import datetime
+from sqlalchemy import Column, String, DATETIME
 from sqlalchemy.orm import relationship
 from models import storage_ident
 
@@ -13,6 +13,11 @@ class State(BaseModel, Base if storage_ident == "db" else object):
     """class state """
     if storage_ident == "db":
         __tablename__ = 'states'
+        id = Column(String(60), primary_key=True)
+        created_at = Column(DATETIME, default=datetime.utcnow())
+        updated_at = Column(DATETIME,
+                        nullable=False,
+                        default=datetime.utcnow())
         name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state")
     else:

@@ -10,8 +10,14 @@
         States
     </H1>
     <UL>
-        {% for v in states %}
-        <LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
+        {% for k, v in states.items() %}
+        <LI>{{ k.id }}: <B>{{ k.name }}</B>
+            <UL>
+                {% for city in v %}
+                <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+                {% endfor %}
+            </UL>
+        </LI>
         {% endfor %}
     </UL>
 </body>

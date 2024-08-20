@@ -2,8 +2,9 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from models import storage_ident
-from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table, DATETIME
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 
 if storage_ident == 'db':

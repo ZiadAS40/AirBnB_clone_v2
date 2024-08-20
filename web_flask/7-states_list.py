@@ -10,12 +10,8 @@ app = Flask(__name__)
 @app.route('/states_list', strict_slashes=False)
 def state_list():
     """return html consit of state list"""
-    
-    states = storage.all(State)
-    if len(states) == 0:
-        myobj = State()
-        State.name = "Texas"
-        states.update({"stateA": myobj})
+
+    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
     return render_template('7-states_list.html',
                            states=states)
 

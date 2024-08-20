@@ -10,7 +10,7 @@
         States
     </H1>
     <UL>
-        {% for v in states.values() %}
+        {% for v in states.values() | sort %}
         <LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
         {% endfor %}
     </UL>
